@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+test_assets/
+*.mp4
+*.spec.bak
+.pytest_cache/
+client_secrets.json
+**/youtube_token.json
+**/tiktok_token.json
+**/tiktok_oauth_pending.json
+**/settings.json
+tiktok_connect_log.txt

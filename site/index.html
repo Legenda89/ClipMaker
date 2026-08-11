@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClipMaker — nopea musiikkiclip somelle</title>
+  <meta name="description" content="ClipMaker leikkaa musiikista 20–60 sekunnin pätkän, yhdistää kuvan tai videon ja vie sisällön YouTube Shortsiin tai TikTokiin." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="index.html">ClipMaker</a>
+      <div class="nav-links">
+        <a href="terms.html">Käyttöehdot</a>
+        <a href="privacy.html">Tietosuoja</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <h1>ClipMaker</h1>
+      <p>
+        Windows-sovellus, joka leikkaa kappaleesta parhaan 20–60 sekunnin kohdan,
+        yhdistää siihen kansikuvan tai videon ja valmistaa pystyclipin
+        YouTube Shortsia ja TikTokia varten.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="privacy.html">Tietosuojaseloste</a>
+        <a class="btn btn-ghost" href="terms.html">Käyttöehdot</a>
+      </div>
+    </header>
+
+    <section class="panel">
+      <h2>Mitä ClipMaker tekee</h2>
+      <ul>
+        <li>Etsii musiikista energisimman kohdan automaattisesti</li>
+        <li>Luo 9:16-videon kuvasta tai videosta</li>
+        <li>Tukee esikuuntelua ennen tallennusta</li>
+        <li>Voi julkaista YouTube Shortsiin tai lähettää TikTok-inboxiin, kun tili on yhdistetty</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Kehittäjäintegraatiot</h2>
+      <ul>
+        <li>YouTube Data API v3 (OAuth, käyttäjän oma kanava)</li>
+        <li>TikTok Login Kit + Content Posting API (OAuth, käyttäjän oma tili)</li>
+        <li>Sovellus toimii paikallisesti Windowsissa; julkaisu tapahtuu vain käyttäjän pyynnöstä</li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      © <span id="y"></span> ClipMaker ·
+      <a href="terms.html">Terms</a> ·
+      <a href="privacy.html">Privacy</a>
+    </footer>
+  </div>
+  <script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+</body>
+</html>
