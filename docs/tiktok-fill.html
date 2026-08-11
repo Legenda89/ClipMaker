@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClipMaker — TikTok lomakkeen täyttö</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .row { display:grid; gap:0.5rem; margin:1rem 0 1.4rem; }
+    .row label { font-weight:700; color: var(--ink); }
+    .row code, .row input {
+      display:block; width:100%; padding:0.75rem 0.9rem;
+      border-radius:0.55rem; border:1px solid var(--line);
+      background:#0f1620; color:var(--ink); font-family:ui-monospace,monospace;
+      font-size:0.92rem;
+    }
+    .copy { margin-top:0.4rem; }
+    .ok { color: var(--accent); font-size:0.9rem; min-height:1.2em; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="index.html">ClipMaker</a>
+      <div class="nav-links">
+        <a href="https://developers.tiktok.com/apps/" target="_blank" rel="noopener">Avaa TikTok Apps</a>
+      </div>
+    </nav>
+    <h1 style="font-family:var(--font-display)">TikTok Developer — liitettävät arvot</h1>
+    <p style="color:var(--muted)">Kopioi nämä kenttiin TikTok for Developers -appissa. Älä käytä TikTokin omia linkkejä.</p>
+
+    <div class="row">
+      <label>Web / Desktop URL</label>
+      <input id="web" readonly value="https://legenda89.github.io/ClipMaker/" />
+      <button class="btn btn-primary copy" data-target="web">Kopioi</button>
+      <div class="ok" id="ok-web"></div>
+    </div>
+    <div class="row">
+      <label>Terms of Service URL</label>
+      <input id="tos" readonly value="https://legenda89.github.io/ClipMaker/terms.html" />
+      <button class="btn btn-primary copy" data-target="tos">Kopioi</button>
+      <div class="ok" id="ok-tos"></div>
+    </div>
+    <div class="row">
+      <label>Privacy Policy URL</label>
+      <input id="privacy" readonly value="https://legenda89.github.io/ClipMaker/privacy.html" />
+      <button class="btn btn-primary copy" data-target="privacy">Kopioi</button>
+      <div class="ok" id="ok-privacy"></div>
+    </div>
+    <div class="row">
+      <label>Redirect URI (Login Kit Desktop)</label>
+      <input id="redirect" readonly value="http://127.0.0.1:8765/callback" />
+      <button class="btn btn-primary copy" data-target="redirect">Kopioi</button>
+      <div class="ok" id="ok-redirect"></div>
+    </div>
+    <div class="row">
+      <label>App icon (1024×1024)</label>
+      <input id="icon" readonly value="https://legenda89.github.io/ClipMaker/app-icon-1024.png" />
+      <button class="btn btn-primary copy" data-target="icon">Kopioi URL</button>
+      <a class="btn btn-ghost" href="app-icon-1024.png" download>Lataa PNG</a>
+      <div class="ok" id="ok-icon"></div>
+    </div>
+    <div class="row">
+      <label>Demo / esittelyvideo</label>
+      <input id="video" readonly value="https://legenda89.github.io/ClipMaker/clipmaker-tiktok-demo.mp4" />
+      <button class="btn btn-primary copy" data-target="video">Kopioi URL</button>
+      <a class="btn btn-ghost" href="clipmaker-tiktok-demo.mp4" download>Lataa MP4</a>
+      <div class="ok" id="ok-video"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Suositeltu järjestys</h2>
+      <ul>
+        <li>Kirjaudu <a href="https://developers.tiktok.com/apps/" target="_blank" rel="noopener">TikTok Apps</a> -sivulle</li>
+        <li>Avaa ClipMaker-app → Basic Information / App details</li>
+        <li>Liitä Web/Desktop, Terms ja Privacy URL:t</li>
+        <li>Lataa app icon (PNG) ja demo video (MP4)</li>
+        <li>Login Kit → Redirect URI: <code>http://127.0.0.1:8765/callback</code></li>
+        <li>Scopes: <code>user.info.basic</code>, <code>video.upload</code></li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll('.copy').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const id = btn.getAttribute('data-target');
+        const el = document.getElementById(id);
+        await navigator.clipboard.writeText(el.value);
+        document.getElementById('ok-' + id).textContent = 'Kopioitu ✓';
+      });
+    });
+  </script>
+</body>
+</html>
