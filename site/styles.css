@@ -75,6 +75,15 @@ a:hover { color: #7eebdf; }
   margin: 0 0 1rem;
 }
 
+.app-icon {
+  display: block;
+  width: 160px;
+  height: 160px;
+  border-radius: 36px;
+  margin: 0 0 1.25rem;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+}
+
 .hero p {
   color: var(--muted);
   font-size: 1.1rem;

@@ -5,6 +5,9 @@ build/
 dist/
 test_assets/
 *.mp4
+!docs/clipmaker-tiktok-demo.mp4
+!assets/clipmaker-tiktok-demo.mp4
+!site/clipmaker-tiktok-demo.mp4
 *.spec.bak
 .pytest_cache/
 client_secrets.json
