@@ -24,9 +24,10 @@ INBOX_INIT = "https://open.tiktokapis.com/v2/post/publish/inbox/video/init/"
 DIRECT_INIT = "https://open.tiktokapis.com/v2/post/publish/video/init/"
 STATUS_URL = "https://open.tiktokapis.com/v2/post/publish/status/fetch/"
 
-DEFAULT_SCOPES = "user.info.basic,video.upload"
-DIRECT_SCOPES = "user.info.basic,video.upload,video.publish"
-DEFAULT_REDIRECT = "http://127.0.0.1:8765/callback"
+# video.publish tarvitaan suoraan julkaisuun (caption mukaan); video.upload riittää inboxiin
+DEFAULT_SCOPES = "user.info.basic,video.upload,video.publish"
+DIRECT_SCOPES = DEFAULT_SCOPES
+DEFAULT_REDIRECT = "http://127.0.0.1:8765/callback/"
 
 
 def _pkce_pair() -> tuple[str, str]:
@@ -37,11 +38,23 @@ def _pkce_pair() -> tuple[str, str]:
     return verifier, challenge
 
 
+def _normalize_redirect(uri: str) -> str:
+    """Match TikTok Desktop docs examples (trailing slash on path)."""
+    uri = (uri or "").strip() or DEFAULT_REDIRECT
+    parsed = urllib.parse.urlparse(uri)
+    path = parsed.path or "/callback"
+    if not path.endswith("/"):
+        path = path + "/"
+    return urllib.parse.urlunparse(
+        (parsed.scheme, parsed.netloc, path, "", "", "")
+    )
+
+
 def _creds() -> tuple[str, str, str]:
     s = load_settings()
     key = (s.get("tiktok_client_key") or "").strip()
     secret = (s.get("tiktok_client_secret") or "").strip()
-    redirect = (s.get("tiktok_redirect_uri") or DEFAULT_REDIRECT).strip()
+    redirect = _normalize_redirect(s.get("tiktok_redirect_uri") or DEFAULT_REDIRECT)
     return key, secret, redirect
 
 
@@ -70,16 +83,22 @@ def disconnect() -> None:
 
 def setup_help() -> str:
     return (
-        "TikTok Desktop -asetus:\n\n"
-        "1) https://developers.tiktok.com/apps  ->  oma app\n"
-        "2) Lisaa tuote: Login Kit (Desktop) + Content Posting API\n"
-        "3) Login Kit -> Redirect URI (TARKALLEEN):\n"
+        "TikTok Desktop / Sandbox -asetus (client_key-virhe):\n\n"
+        "Draft Production EI toimi kirjautumisessa ennen hyvaksyntaa.\n"
+        "Kayta Sandboxia:\n"
+        "1) developers.tiktok.com -> app -> Sandbox (esim. ClipMakerDev)\n"
+        "2) Login Kit -> Desktop: lisaa Redirect URI TARKALLEEN:\n"
         f"   {DEFAULT_REDIRECT}\n"
-        "4) Scopes: user.info.basic, video.upload\n"
-        "5) Kopioi Client Key + Client Secret ClipMakeriin -> Tallenna\n"
-        "6) Paina Yhdista TikTok -> kirjaudu selaimessa\n"
-        "7) Jos callback ei toimi: kopioi osoitepalkin URL ja\n"
-        "   paina 'Liita callback-URL'\n"
+        "   (loppuviiva / on pakollinen; Desktop* = viela kesken)\n"
+        "3) Apply changes\n"
+        "4) Target users -> Add account (oma TikTok-tili)\n"
+        "5) Credentials (Sandbox): kopioi Client Key + Secret ClipMakeriin\n"
+        "   Sandbox-key alkaa usein 'sbaw...' (Production 'aw...')\n"
+        "   EI App ID -numeroa.\n"
+        "6) Scopes: user.info.basic, video.upload, video.publish\n"
+        "7) ClipMaker: Tallenna -> Yhdista TikTok\n"
+        "8) Jos callback ei toimi: Liita callback-URL\n"
+        "Huom: suora julkaisu (caption) vaatii video.publish — yhdista uudelleen jos vanha token.\n"
     )
 
 
@@ -188,10 +207,10 @@ def finish_from_redirect_url(url: str) -> str:
     )
     _clear_pending()
     update_settings(tiktok_redirect_uri=pending.get("redirect_uri") or DEFAULT_REDIRECT)
-    return "TikTok yhdistetty (callback-URL). Voit julkaista inbox-luonnoksia."
+    return "TikTok yhdistetty (callback-URL). Voit julkaista suoraan tai inbox-luonnoksena."
 
 
-def connect(timeout_sec: int = 180, *, request_publish_scope: bool = False) -> str:
+def connect(timeout_sec: int = 180, *, request_publish_scope: bool = True) -> str:
     """
     OAuth via local callback + Desktop PKCE.
     On timeout, pending PKCE state is kept so finish_from_redirect_url() still works.
@@ -199,8 +218,15 @@ def connect(timeout_sec: int = 180, *, request_publish_scope: bool = False) -> s
     key, secret, redirect = _creds()
     if not key or not secret:
         raise RuntimeError(setup_help())
+    # Common mistake: App ID (numeric) pasted instead of Client Key
+    if key.isdigit() or len(key) < 10:
+        raise RuntimeError(
+            "TikTok Client Key nayttaa vaaralta (App ID?).\n"
+            "Kopioi Credentials-sivulta Client Key (yleensa alkaa 'aw...').\n\n"
+            + setup_help()
+        )
 
-    redirect = redirect or DEFAULT_REDIRECT
+    redirect = _normalize_redirect(redirect or DEFAULT_REDIRECT)
     update_settings(tiktok_redirect_uri=redirect)
 
     parsed = urllib.parse.urlparse(redirect)
@@ -275,8 +301,12 @@ def connect(timeout_sec: int = 180, *, request_publish_scope: bool = False) -> s
         "state": state,
         "code_challenge": code_challenge,
         "code_challenge_method": "S256",
+        # Pakota suostumusruutu — vanha token ilman video.publish ei päivity muuten
+        "disable_auto_auth": "1",
     }
     auth_link = AUTH_URL + "?" + urllib.parse.urlencode(params)
+    print("TikTok OAuth URL:", auth_link, flush=True)
+    print("Pyydetyt scopet:", scopes, flush=True)
     webbrowser.open(auth_link)
 
     deadline = time.time() + timeout_sec
@@ -316,7 +346,7 @@ def connect(timeout_sec: int = 180, *, request_publish_scope: bool = False) -> s
     )
     _clear_pending()
     update_settings(tiktok_redirect_uri=redirect)
-    return "TikTok yhdistetty. Voit julkaista inbox-luonnoksia."
+    return "TikTok yhdistetty. Voit julkaista suoraan (caption) tai inbox-luonnoksena."
 
 
 def _access_token() -> str:
@@ -342,6 +372,7 @@ def upload_video(
     title: str = "",
     direct_post: bool = False,
     privacy_level: str = "SELF_ONLY",
+    ai_label: bool = True,
     on_progress: Callable[[float], None] | None = None,
 ) -> dict:
     path = Path(video_path)
@@ -357,10 +388,15 @@ def upload_video(
         "Content-Type": "application/json; charset=UTF-8",
     }
 
+    # TikTok post_info.title = caption (max ~2200 merkkiä)
+    caption = (title or path.stem).strip()
+    if len(caption) > 2200:
+        caption = caption[:2197] + "…"
+
     if direct_post:
         body = {
             "post_info": {
-                "title": (title or path.stem)[:150],
+                "title": caption,
                 "privacy_level": privacy_level,
                 "disable_duet": False,
                 "disable_comment": False,
@@ -373,6 +409,8 @@ def upload_video(
                 "total_chunk_count": total_chunks,
             },
         }
+        if ai_label:
+            body["post_info"]["is_aigc"] = True
         init_url = DIRECT_INIT
     else:
         body = {
@@ -390,7 +428,14 @@ def upload_video(
     err_obj = init_json.get("error")
     err_code = err_obj.get("code") if isinstance(err_obj, dict) else None
     if init.status_code >= 400 or (err_code not in (None, "ok", "OK", 0)):
-        raise RuntimeError(f"TikTok upload init epaonnistui: {err_obj or init_json}")
+        hint = ""
+        err_text = str(err_obj or init_json).lower()
+        if direct_post and ("scope" in err_text or "publish" in err_text or "permission" in err_text):
+            hint = (
+                "\n\nVihje: suora julkaisu vaatii scopen video.publish. "
+                "ClipMaker → Katkaise TikTok → Yhdistä TikTok uudelleen."
+            )
+        raise RuntimeError(f"TikTok upload init epaonnistui: {err_obj or init_json}{hint}")
 
     data = init_json.get("data") or {}
     upload_url = data.get("upload_url")
@@ -442,8 +487,9 @@ def upload_video(
         "status": status_text,
         "mode": "direct" if direct_post else "inbox",
         "message": (
-            "Video julkaistu TikTokiin."
+            "Video julkaistu TikTokiin (caption mukana)."
             if direct_post
             else "Video lahetetty TikTok-inboxiin — avaa TikTok ja julkaise luonnos."
         ),
+        "caption": caption if direct_post else "",
     }

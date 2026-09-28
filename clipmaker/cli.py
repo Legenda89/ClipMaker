@@ -91,42 +91,66 @@ def cmd_make(args: argparse.Namespace) -> int:
 
     if "youtube" in platforms:
         if not youtube_publish.is_connected():
-            print("Virhe: YouTube ei ole yhdistetty. Avaa ClipMaker GUI → Yhdistä YouTube.", file=sys.stderr)
-            return 2
-        print("Julkaistaan YouTube Shorts…")
-        yt = youtube_publish.upload_short(
-            str(out),
-            title=title,
-            description=args.description or "",
-            privacy_status=args.privacy,
-            on_progress=_progress("YouTube"),
-        )
-        result["youtube"] = {"id": yt.get("id"), "url": yt.get("url")}
-        print(f"YouTube: {yt.get('url')}")
+            msg = (
+                "YouTube ei ole yhdistetty tai token on vanhentunut. "
+                "Avaa ClipMaker GUI → Yhdistä YouTube."
+            )
+            print(f"Virhe: {msg}", file=sys.stderr)
+            result["youtube"] = {"ok": False, "error": msg}
+        else:
+            print("Julkaistaan YouTube Shorts…")
+            try:
+                yt = youtube_publish.upload_short(
+                    str(out),
+                    title=title,
+                    description=args.description or "",
+                    privacy_status=args.privacy,
+                    ai_label=getattr(args, "ai_label", True),
+                    on_progress=_progress("YouTube"),
+                )
+                result["youtube"] = {
+                    "ok": True,
+                    "id": yt.get("id"),
+                    "url": yt.get("url"),
+                }
+                print(f"YouTube: {yt.get('url')}")
+            except Exception as exc:  # noqa: BLE001
+                print(f"YouTube Shorts epäonnistui: {exc}", file=sys.stderr)
+                result["youtube"] = {"ok": False, "error": str(exc)}
 
     if "tiktok" in platforms:
         if not tiktok_publish.is_connected():
             print("Virhe: TikTok ei ole yhdistetty. Avaa ClipMaker GUI → Yhdistä TikTok.", file=sys.stderr)
-            return 2
-        direct = args.tiktok_mode == "direct"
-        print(f"Julkaistaan TikTok ({'suora' if direct else 'inbox'})…")
-        tt = tiktok_publish.upload_video(
-            str(out),
-            title=title,
-            direct_post=direct,
-            privacy_level="SELF_ONLY",
-            on_progress=_progress("TikTok"),
-        )
-        result["tiktok"] = {
-            "publish_id": tt.get("publish_id"),
-            "status": tt.get("status"),
-            "mode": tt.get("mode"),
-            "message": tt.get("message"),
-        }
-        print(tt.get("message") or "TikTok OK")
+            result["tiktok"] = {"ok": False, "error": "TikTok ei ole yhdistetty"}
+        else:
+            direct = args.tiktok_mode == "direct"
+            tt_caption = (args.description or "").strip() or title
+            print(f"Julkaistaan TikTok ({'suora' if direct else 'inbox'})…")
+            try:
+                tt = tiktok_publish.upload_video(
+                    str(out),
+                    title=tt_caption,
+                    direct_post=direct,
+                    privacy_level="SELF_ONLY",
+                    ai_label=getattr(args, "ai_label", True),
+                    on_progress=_progress("TikTok"),
+                )
+                result["tiktok"] = {
+                    "ok": True,
+                    "publish_id": tt.get("publish_id"),
+                    "status": tt.get("status"),
+                    "mode": tt.get("mode"),
+                    "message": tt.get("message"),
+                    "caption": tt.get("caption") or "",
+                }
+                print(tt.get("message") or "TikTok OK")
+            except Exception as exc:  # noqa: BLE001
+                print(f"TikTok-julkaisu epäonnistui: {exc}", file=sys.stderr)
+                result["tiktok"] = {"ok": False, "error": str(exc)}
 
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
+    # Clip-tiedosto on valmis vaikka alustajulkaisu soft-failaisi.
     return 0
 
 
@@ -204,9 +228,21 @@ def build_parser() -> argparse.ArgumentParser:
         "--tiktok-mode",
         default="inbox",
         choices=["inbox", "direct"],
-        help="inbox = luonnos TikTokissa (suositus), direct = suora julkaisu",
+        help="direct = suora julkaisu captionilla (oletus release-putkessa), inbox = luonnos ilman captionia",
     )
     make.add_argument("--no-fade", action="store_true")
+    make.add_argument(
+        "--ai-label",
+        action="store_true",
+        default=True,
+        help="Merkitse tekoälytunniste (YT containsSyntheticMedia + TikTok is_aigc)",
+    )
+    make.add_argument(
+        "--no-ai-label",
+        action="store_false",
+        dest="ai_label",
+        help="Älä merkitse tekoälytunnistetta",
+    )
     make.add_argument("--json", action="store_true", help="Tulosta tulos JSON-muodossa")
     make.set_defaults(func=cmd_make)
 

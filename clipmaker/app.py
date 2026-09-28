@@ -65,7 +65,7 @@ class ClipMakerApp(ctk.CTk, TkinterDnD.DnDWrapper):
         self.publish_title = ctk.StringVar(value="")
         self.publish_desc = ctk.StringVar(value="")
         self.yt_privacy = ctk.StringVar(value="public")
-        self.tiktok_mode = ctk.StringVar(value="inbox")
+        self.tiktok_mode = ctk.StringVar(value="direct")
         self.yt_client_secrets = ctk.StringVar(value=settings.get("youtube_client_secrets", ""))
         self.yt_client_id = ctk.StringVar(value=settings.get("youtube_client_id", ""))
         self.yt_client_secret = ctk.StringVar(value=settings.get("youtube_client_secret", ""))
@@ -368,10 +368,10 @@ class ClipMakerApp(ctk.CTk, TkinterDnD.DnDWrapper):
         tt_opts.pack(fill="x", padx=20, pady=(8, 0))
         ctk.CTkLabel(tt_opts, text="TikTok:").pack(side="left")
         ctk.CTkRadioButton(
-            tt_opts, text="Inbox-luonnos (suositus)", variable=self.tiktok_mode, value="inbox"
+            tt_opts, text="Suora julkaisu (caption)", variable=self.tiktok_mode, value="direct"
         ).pack(side="left", padx=(8, 0))
         ctk.CTkRadioButton(
-            tt_opts, text="Suora julkaisu", variable=self.tiktok_mode, value="direct"
+            tt_opts, text="Inbox-luonnos (ei captionia)", variable=self.tiktok_mode, value="inbox"
         ).pack(side="left", padx=(8, 0))
 
         pub_btns = ctk.CTkFrame(root, fg_color="transparent")
@@ -497,7 +497,7 @@ class ClipMakerApp(ctk.CTk, TkinterDnD.DnDWrapper):
         update_settings(
             tiktok_client_key=key,
             tiktok_client_secret=secret,
-            tiktok_redirect_uri="http://127.0.0.1:8765/callback",
+            tiktok_redirect_uri="http://127.0.0.1:8765/callback/",
         )
         self._refresh_connection_status()
         self.status.set("TikTok-credentials tallennettu.")
@@ -567,7 +567,7 @@ class ClipMakerApp(ctk.CTk, TkinterDnD.DnDWrapper):
         update_settings(
             tiktok_client_key=key,
             tiktok_client_secret=secret,
-            tiktok_redirect_uri="http://127.0.0.1:8765/callback",
+            tiktok_redirect_uri="http://127.0.0.1:8765/callback/",
         )
 
         self._connect_busy = True
@@ -677,6 +677,9 @@ class ClipMakerApp(ctk.CTk, TkinterDnD.DnDWrapper):
         if not video or self._busy:
             return
         title = self.publish_title.get().strip() or Path(video).stem
+        desc = self.publish_desc.get().strip()
+        # Suora julkaisu: TikTok title = caption (tarina + tagit)
+        caption = "\n\n".join(p for p in (title, desc) if p).strip() or title
         direct = self.tiktok_mode.get() == "direct"
 
         self._busy = True
@@ -688,7 +691,7 @@ class ClipMakerApp(ctk.CTk, TkinterDnD.DnDWrapper):
             try:
                 result = tiktok_publish.upload_video(
                     video,
-                    title=title,
+                    title=caption if direct else title,
                     direct_post=direct,
                     privacy_level="SELF_ONLY",
                     on_progress=lambda p: self.after(0, lambda: self.progress.set(p)),

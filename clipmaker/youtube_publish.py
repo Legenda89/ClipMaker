@@ -84,7 +84,16 @@ def is_connected() -> bool:
         return False
     try:
         creds = Credentials.from_authorized_user_file(str(token), SCOPES)
-        return bool(creds and (creds.valid or creds.refresh_token))
+        if not creds:
+            return False
+        if creds.valid:
+            return True
+        if not creds.refresh_token:
+            return False
+        # Varmista että refresh_token vielä toimii (muuten upload kaatuu invalid_grantilla).
+        creds.refresh(Request())
+        token.write_text(creds.to_json(), encoding="utf-8")
+        return True
     except Exception:  # noqa: BLE001
         return False
 
@@ -147,6 +156,7 @@ def upload_short(
     title: str,
     description: str = "",
     privacy_status: str = "public",
+    ai_label: bool = True,
     on_progress: Callable[[float], None] | None = None,
 ) -> dict:
     """Upload vertical short. Include #Shorts in title/description for Shorts shelf."""
@@ -172,6 +182,8 @@ def upload_short(
             "selfDeclaredMadeForKids": False,
         },
     }
+    if ai_label:
+        body["status"]["containsSyntheticMedia"] = True
     media = MediaFileUpload(str(path), mimetype="video/mp4", resumable=True, chunksize=1024 * 1024)
     request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
 
