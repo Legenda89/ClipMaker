@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ClipMaker — nopea musiikkiclip somelle</title>
-  <meta name="description" content="ClipMaker leikkaa musiikista 20–60 sekunnin pätkän, yhdistää kuvan tai videon ja vie sisällön YouTube Shortsiin tai TikTokiin." />
+  <title>ClipMaker — music clips for YouTube Shorts &amp; TikTok</title>
+  <meta name="description" content="ClipMaker is a Windows desktop app that finds the best 20–60 second moment in a song, builds a vertical video with your cover art, and publishes to YouTube Shorts or TikTok with the user’s own account." />
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32" />
   <link rel="icon" type="image/png" href="favicon-16.png" sizes="16x16" />
@@ -19,8 +19,11 @@
     <nav class="nav">
       <a class="brand" href="index.html">ClipMaker</a>
       <div class="nav-links">
-        <a href="terms.html">Käyttöehdot</a>
-        <a href="privacy.html">Tietosuoja</a>
+        <a href="#how">How it works</a>
+        <a href="#tiktok">TikTok</a>
+        <a href="#download">Download</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
       </div>
     </nav>
 
@@ -28,40 +31,145 @@
       <img class="app-icon" src="app-icon-1024.png" width="160" height="160" alt="ClipMaker app icon" />
       <h1>ClipMaker</h1>
       <p>
-        Windows-sovellus, joka leikkaa kappaleesta parhaan 20–60 sekunnin kohdan,
-        yhdistää siihen kansikuvan tai videon ja valmistaa pystyclipin
-        YouTube Shortsia ja TikTokia varten.
+        A Windows desktop product for musicians and creators. ClipMaker finds the strongest
+        20–60 second section of a track, combines it with cover art or video, and prepares a
+        vertical clip for YouTube Shorts and TikTok. Publishing uses the creator’s own
+        Google/YouTube or TikTok account — ClipMaker never posts without an explicit click.
       </p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="clipmaker-tiktok-demo.mp4">Katso esittelyvideo</a>
-        <a class="btn btn-ghost" href="privacy.html">Tietosuojaseloste</a>
-        <a class="btn btn-ghost" href="terms.html">Käyttöehdot</a>
+        <a class="btn btn-primary" href="clipmaker-tiktok-demo.mp4">Watch product demo</a>
+        <a class="btn btn-ghost" href="#how">How it works</a>
+        <a class="btn btn-ghost" href="privacy.html">Privacy Policy</a>
+        <a class="btn btn-ghost" href="terms.html">Terms of Service</a>
+      </div>
+      <div class="legal-bar">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="clipmaker-tiktok-demo.mp4">Demo video (MP4)</a>
       </div>
     </header>
 
-    <section class="panel">
-      <h2>Mitä ClipMaker tekee</h2>
-      <ul>
-        <li>Etsii musiikista energisimman kohdan automaattisesti</li>
-        <li>Luo 9:16-videon kuvasta tai videosta</li>
-        <li>Tukee esikuuntelua ennen tallennusta</li>
-        <li>Voi julkaista YouTube Shortsiin tai lähettää TikTok-inboxiin, kun tili on yhdistetty</li>
-      </ul>
+    <section class="section" id="how">
+      <h2>How ClipMaker works</h2>
+      <p class="lead">End-to-end flow on the user’s Windows PC. Media stays local until the user chooses to publish.</p>
+      <ol class="steps">
+        <li>
+          <strong>Import audio + visual</strong>
+          Drop a song (WAV/MP3) and cover image or background video into the desktop app.
+        </li>
+        <li>
+          <strong>Find the best moment</strong>
+          ClipMaker analyzes loudness/energy and suggests a 20–60 second start point. The user can preview and adjust.
+        </li>
+        <li>
+          <strong>Render a vertical clip</strong>
+          Export a 9:16 MP4 suitable for Shorts and TikTok, saved on the user’s machine.
+        </li>
+        <li>
+          <strong>Connect accounts (optional)</strong>
+          OAuth login for YouTube and/or TikTok. Tokens are stored only in the user’s local AppData folder.
+        </li>
+        <li>
+          <strong>Publish on demand</strong>
+          One click uploads the clip to YouTube Shorts and/or TikTok (direct post or creator inbox), with an AI-content label when enabled.
+        </li>
+      </ol>
     </section>
 
-    <section class="panel">
-      <h2>Kehittäjäintegraatiot</h2>
-      <ul>
-        <li>YouTube Data API v3 (OAuth, käyttäjän oma kanava)</li>
-        <li>TikTok Login Kit + Content Posting API (OAuth, käyttäjän oma tili)</li>
-        <li>Sovellus toimii paikallisesti Windowsissa; julkaisu tapahtuu vain käyttäjän pyynnöstä</li>
-      </ul>
+    <section class="section">
+      <h2>Product features</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Local-first desktop app</h3>
+          <ul>
+            <li>Runs on Windows; no ClipMaker cloud account required</li>
+            <li>Drag-and-drop audio and cover art</li>
+            <li>Auto best-moment detection + manual start time</li>
+            <li>Presets for TikTok / YouTube / square</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Creator publishing</h3>
+          <ul>
+            <li>YouTube Data API v3 — Shorts upload to the user’s channel</li>
+            <li>TikTok Login Kit (Desktop) — user authorization</li>
+            <li>TikTok Content Posting API — inbox draft or direct post</li>
+            <li>Optional synthetic-media / AIGC labels</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tiktok">
+      <h2>TikTok integration</h2>
+      <p class="lead">
+        ClipMaker uses TikTok for Developers products to let the signed-in creator authorize
+        ClipMaker and upload a short video they just rendered. Products and scopes used:
+      </p>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Login Kit (Desktop)</h3>
+          <p><span class="scope">user.info.basic</span></p>
+          <p>
+            Opens the TikTok authorization page in the browser. After the user approves,
+            ClipMaker receives an OAuth code on <code>http://127.0.0.1:8765/callback/</code>
+            and stores tokens locally so the same creator can publish later without logging in every time.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Content Posting API</h3>
+          <p><span class="scope">video.upload</span> · <span class="scope">video.publish</span></p>
+          <p>
+            <strong>video.upload</strong> sends the rendered MP4 to the creator’s TikTok inbox as a draft.
+            <strong>video.publish</strong> posts directly with caption (Sandbox: private / SELF_ONLY until the app is approved).
+            The user chooses the mode in the ClipMaker UI and must click Publish.
+          </p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>What the demo video shows</h3>
+        <ul>
+          <li>ClipMaker website (this page) and the Windows app UI</li>
+          <li>Connect TikTok → Login Kit consent (scope <span class="scope">user.info.basic</span>)</li>
+          <li>Create a 30s clip from audio + cover</li>
+          <li>Publish to TikTok via Content Posting (<span class="scope">video.upload</span> / <span class="scope">video.publish</span>)</li>
+          <li>Success state in the app</li>
+        </ul>
+        <p style="margin-top:0.9rem"><a href="clipmaker-tiktok-demo.mp4">Open demo video →</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="download">
+      <h2>Get ClipMaker</h2>
+      <div class="panel">
+        <p>
+          ClipMaker is distributed as a Windows desktop application for creators who already
+          produce music locally. Source and releases are maintained on GitHub.
+        </p>
+        <div class="cta-row" style="margin-top:1rem">
+          <a class="btn btn-primary" href="https://github.com/Legenda89/ClipMaker" target="_blank" rel="noopener">GitHub repository</a>
+          <a class="btn btn-ghost" href="clipmaker-tiktok-demo.mp4">Product demo</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>FAQ</h2>
+      <div class="panel">
+        <h3>Does ClipMaker post without permission?</h3>
+        <p>No. Connecting TikTok/YouTube only stores OAuth tokens. Uploads happen only when the user presses Publish.</p>
+        <h3>Where is data stored?</h3>
+        <p>Media files stay on the user’s PC. OAuth tokens live under the user’s local AppData\ClipMaker folder. See the Privacy Policy.</p>
+        <h3>Is this a mobile app?</h3>
+        <p>No. ClipMaker is a Windows desktop app using TikTok Login Kit for Desktop and the Content Posting API.</p>
+      </div>
     </section>
 
     <footer class="footer">
       © <span id="y"></span> ClipMaker ·
-      <a href="terms.html">Terms</a> ·
-      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms of Service</a> ·
+      <a href="privacy.html">Privacy Policy</a> ·
+      <a href="tiktok-fill.html">Developer form helper</a>
     </footer>
   </div>
   <script>document.getElementById("y").textContent = new Date().getFullYear();</script>

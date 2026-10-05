@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ClipMaker — TikTok lomakkeen täyttö</title>
+  <title>ClipMaker — TikTok submission helper</title>
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180" />
@@ -11,12 +11,13 @@
   <style>
     .row { display:grid; gap:0.5rem; margin:1rem 0 1.4rem; }
     .row label { font-weight:700; color: var(--ink); }
-    .row code, .row input {
+    .row code, .row input, .row textarea {
       display:block; width:100%; padding:0.75rem 0.9rem;
       border-radius:0.55rem; border:1px solid var(--line);
       background:#0f1620; color:var(--ink); font-family:ui-monospace,monospace;
       font-size:0.92rem;
     }
+    .row textarea { min-height: 220px; resize: vertical; line-height: 1.45; }
     .copy { margin-top:0.4rem; }
     .ok { color: var(--accent); font-size:0.9rem; min-height:1.2em; }
   </style>
@@ -26,60 +27,96 @@
     <nav class="nav">
       <a class="brand" href="index.html">ClipMaker</a>
       <div class="nav-links">
-        <a href="https://developers.tiktok.com/apps/" target="_blank" rel="noopener">Avaa TikTok Apps</a>
+        <a href="index.html">Home</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://developers.tiktok.com/apps/" target="_blank" rel="noopener">TikTok Apps</a>
       </div>
     </nav>
-    <h1 style="font-family:var(--font-display)">TikTok Developer — liitettävät arvot</h1>
-    <p style="color:var(--muted)">Kopioi nämä kenttiin TikTok for Developers -appissa. Älä käytä TikTokin omia linkkejä.</p>
+    <h1 style="font-family:var(--font-display)">TikTok app review — copy values</h1>
+    <p style="color:var(--muted)">
+      Use these exact URLs and scopes. Website must be the product homepage (not a login page).
+      Demo video must show Login Kit + Content Posting and every selected scope.
+    </p>
 
     <div class="row">
-      <label>Web / Desktop URL</label>
+      <label>Website URL (Web / Desktop URL)</label>
       <input id="web" readonly value="https://legenda89.github.io/ClipMaker/" />
-      <button class="btn btn-primary copy" data-target="web">Kopioi</button>
+      <button class="btn btn-primary copy" data-target="web">Copy</button>
       <div class="ok" id="ok-web"></div>
     </div>
     <div class="row">
       <label>Terms of Service URL</label>
       <input id="tos" readonly value="https://legenda89.github.io/ClipMaker/terms.html" />
-      <button class="btn btn-primary copy" data-target="tos">Kopioi</button>
+      <button class="btn btn-primary copy" data-target="tos">Copy</button>
       <div class="ok" id="ok-tos"></div>
     </div>
     <div class="row">
       <label>Privacy Policy URL</label>
       <input id="privacy" readonly value="https://legenda89.github.io/ClipMaker/privacy.html" />
-      <button class="btn btn-primary copy" data-target="privacy">Kopioi</button>
+      <button class="btn btn-primary copy" data-target="privacy">Copy</button>
       <div class="ok" id="ok-privacy"></div>
     </div>
     <div class="row">
       <label>Redirect URI (Login Kit Desktop)</label>
-      <input id="redirect" readonly value="http://127.0.0.1:8765/callback" />
-      <button class="btn btn-primary copy" data-target="redirect">Kopioi</button>
+      <input id="redirect" readonly value="http://127.0.0.1:8765/callback/" />
+      <button class="btn btn-primary copy" data-target="redirect">Copy</button>
       <div class="ok" id="ok-redirect"></div>
+    </div>
+    <div class="row">
+      <label>Scopes (must match Products + demo video)</label>
+      <input id="scopes" readonly value="user.info.basic,video.upload,video.publish" />
+      <button class="btn btn-primary copy" data-target="scopes">Copy</button>
+      <div class="ok" id="ok-scopes"></div>
     </div>
     <div class="row">
       <label>App icon (1024×1024)</label>
       <input id="icon" readonly value="https://legenda89.github.io/ClipMaker/app-icon-1024.png" />
-      <button class="btn btn-primary copy" data-target="icon">Kopioi URL</button>
-      <a class="btn btn-ghost" href="app-icon-1024.png" download>Lataa PNG</a>
+      <button class="btn btn-primary copy" data-target="icon">Copy URL</button>
+      <a class="btn btn-ghost" href="app-icon-1024.png" download>Download PNG</a>
       <div class="ok" id="ok-icon"></div>
     </div>
     <div class="row">
-      <label>Demo / esittelyvideo</label>
+      <label>Demo video (upload this MP4 in App review)</label>
       <input id="video" readonly value="https://legenda89.github.io/ClipMaker/clipmaker-tiktok-demo.mp4" />
-      <button class="btn btn-primary copy" data-target="video">Kopioi URL</button>
-      <a class="btn btn-ghost" href="clipmaker-tiktok-demo.mp4" download>Lataa MP4</a>
+      <button class="btn btn-primary copy" data-target="video">Copy URL</button>
+      <a class="btn btn-ghost" href="clipmaker-tiktok-demo.mp4" download>Download MP4</a>
       <div class="ok" id="ok-video"></div>
     </div>
 
+    <div class="row">
+      <label>App review — detailed explanation (Apply Reason / how each product &amp; scope works)</label>
+      <textarea id="reason" readonly>ClipMaker is a Windows desktop application for musicians and creators (product website: https://legenda89.github.io/ClipMaker/). It finds the best 20–60 second moment in a song, renders a vertical MP4 with cover art, and lets the signed-in creator publish that clip to their own TikTok account.
+
+Products and scopes:
+
+1) Login Kit (Desktop) — scope user.info.basic
+   The user clicks “Connect TikTok” in ClipMaker. The app opens TikTok’s OAuth authorization page (PKCE). After approval, TikTok redirects to http://127.0.0.1:8765/callback/ on the user’s machine. ClipMaker exchanges the code for tokens and stores them only in the user’s local AppData folder. user.info.basic is used to identify the authorized creator session required before Content Posting.
+
+2) Content Posting API — scope video.upload
+   After the user renders a clip, they can choose Inbox mode. ClipMaker calls the Content Posting inbox upload flow to send the local MP4 to the creator’s TikTok inbox as a draft. The creator finishes publishing in the TikTok app. This demonstrates video.upload end-to-end.
+
+3) Content Posting API — scope video.publish
+   The user can choose Direct post mode. ClipMaker calls creator_info/query, then post/publish/video/init with FILE_UPLOAD, uploads chunks, and polls status until complete. Caption and AI label (is_aigc) are included. In Sandbox / unaudited clients, posts use SELF_ONLY (private account). This demonstrates video.publish end-to-end.
+
+We do not request any other scopes. The demo video shows: (a) the ClipMaker website with Privacy Policy and Terms of Service, (b) opening the Windows app, (c) Login Kit authorization for user.info.basic, (d) creating a clip locally, (e) Content Posting with video.upload and video.publish labeled, (f) the user clicking Publish and a success state.
+
+Sandbox target user is used for the live integration demo when the app is not yet in production.</textarea>
+      <button class="btn btn-primary copy" data-target="reason">Copy explanation</button>
+      <div class="ok" id="ok-reason"></div>
+    </div>
+
     <div class="panel">
-      <h2>Suositeltu järjestys</h2>
+      <h2>Resubmit checklist</h2>
       <ul>
-        <li>Kirjaudu <a href="https://developers.tiktok.com/apps/" target="_blank" rel="noopener">TikTok Apps</a> -sivulle</li>
-        <li>Avaa ClipMaker-app → Basic Information / App details</li>
-        <li>Liitä Web/Desktop, Terms ja Privacy URL:t</li>
-        <li>Lataa app icon (PNG) ja demo video (MP4)</li>
-        <li>Login Kit → Redirect URI: <code>http://127.0.0.1:8765/callback</code></li>
-        <li>Scopes: <code>user.info.basic</code>, <code>video.upload</code></li>
+        <li>Website URL = <code>https://legenda89.github.io/ClipMaker/</code> (product site, not a login page)</li>
+        <li>Privacy Policy + Terms of Service visible in the top navigation (no menu required)</li>
+        <li>Products: Login Kit (Desktop) + Content Posting API only</li>
+        <li>Scopes exactly: <code>user.info.basic</code>, <code>video.upload</code>, <code>video.publish</code> — remove any unused scopes</li>
+        <li>Redirect URI exactly: <code>http://127.0.0.1:8765/callback/</code> (trailing slash)</li>
+        <li>Upload the new demo MP4 in App review (shows full E2E + each scope)</li>
+        <li>Paste the explanation above into the App review text field</li>
+        <li>Verify URL properties for Website / Privacy / Terms in Production</li>
       </ul>
     </div>
   </div>
@@ -89,7 +126,7 @@
         const id = btn.getAttribute('data-target');
         const el = document.getElementById(id);
         await navigator.clipboard.writeText(el.value);
-        document.getElementById('ok-' + id).textContent = 'Kopioitu ✓';
+        document.getElementById('ok-' + id).textContent = 'Copied ✓';
       });
     });
   </script>

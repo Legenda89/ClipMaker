@@ -6,7 +6,7 @@
   --accent: #2ec4b6;
   --accent-2: #ff7a59;
   --line: rgba(232, 238, 246, 0.12);
-  --max: 720px;
+  --max: 880px;
   --font-display: "Syne", sans-serif;
   --font-body: "Manrope", sans-serif;
 }
@@ -87,7 +87,7 @@ a:hover { color: #7eebdf; }
 .hero p {
   color: var(--muted);
   font-size: 1.1rem;
-  max-width: 38rem;
+  max-width: 40rem;
   margin: 0 0 1.75rem;
 }
 
@@ -119,15 +119,30 @@ a:hover { color: #7eebdf; }
 }
 .btn-ghost:hover { border-color: rgba(232,238,246,0.3); color: var(--ink); }
 
+.section {
+  margin-top: 3rem;
+}
+.section > h2 {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.75rem;
+}
+.section > .lead {
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+  max-width: 40rem;
+}
+
 .panel {
-  margin-top: 2.5rem;
+  margin-top: 1.25rem;
   padding: 1.35rem 1.4rem;
   border: 1px solid var(--line);
   border-radius: 0.9rem;
   background: rgba(20, 28, 39, 0.7);
 }
 
-.panel h2 {
+.panel h2, .panel h3 {
   font-family: var(--font-display);
   font-size: 1.15rem;
   margin: 0 0 0.75rem;
@@ -140,6 +155,60 @@ a:hover { color: #7eebdf; }
 }
 
 .panel li { margin: 0.35rem 0; }
+.panel p { color: var(--muted); margin: 0 0 0.75rem; }
+.panel p:last-child { margin-bottom: 0; }
+
+.steps {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.steps li {
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background: rgba(20, 28, 39, 0.7);
+  padding: 1.1rem 1.2rem 1.1rem 3.4rem;
+  position: relative;
+  color: var(--muted);
+}
+.steps li::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 1rem;
+  top: 1.05rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 999px;
+  background: rgba(46, 196, 182, 0.18);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: grid;
+  place-items: center;
+}
+.steps strong {
+  display: block;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+}
+
+.grid-2 {
+  display: grid;
+  gap: 0.9rem;
+}
+@media (min-width: 720px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+}
+
+.scope {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.86rem;
+  color: var(--accent);
+}
 
 .legal h1 {
   font-family: var(--font-display);
@@ -169,4 +238,19 @@ a:hover { color: #7eebdf; }
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 0.9rem;
+}
+.footer a { margin: 0 0.15rem; }
+
+.legal-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin: 1.5rem 0 0;
+  padding: 0.9rem 0 0;
+  border-top: 1px solid var(--line);
+}
+.legal-bar a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
 }
