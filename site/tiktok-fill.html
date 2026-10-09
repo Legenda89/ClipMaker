@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ClipMaker — TikTok submission helper</title>
+  <title>Clipmaker — TikTok submission helper</title>
+  <meta name="application-name" content="Clipmaker" />
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180" />
@@ -20,12 +21,20 @@
     .row textarea { min-height: 220px; resize: vertical; line-height: 1.45; }
     .copy { margin-top:0.4rem; }
     .ok { color: var(--accent); font-size:0.9rem; min-height:1.2em; }
+    .warn {
+      border: 1px solid rgba(255, 122, 89, 0.45);
+      background: rgba(255, 122, 89, 0.08);
+      border-radius: 0.7rem;
+      padding: 1rem 1.1rem;
+      margin: 1.2rem 0;
+    }
+    .warn h2 { margin-top: 0; font-family: var(--font-display); font-size: 1.15rem; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <nav class="nav">
-      <a class="brand" href="index.html">ClipMaker</a>
+      <a class="brand" href="index.html">Clipmaker</a>
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="terms.html">Terms of Service</a>
@@ -35,10 +44,35 @@
     </nav>
     <h1 style="font-family:var(--font-display)">TikTok app review — copy values</h1>
     <p style="color:var(--muted)">
-      Use these exact URLs and scopes. Website must be the product homepage (not a login page).
-      Demo video must show Login Kit + Content Posting and every selected scope.
+      App name in the portal must be exactly <strong>Clipmaker</strong> (same as the website title and brand).
+      Scopes must match Products + the manual demo video.
     </p>
 
+    <div class="warn">
+      <h2>Manual demo video required</h2>
+      <p>
+        TikTok rejects AI agents, automated tools, and screen-simulation demos.
+        Record with Windows Game Bar (<kbd>Win</kbd>+<kbd>G</kbd>) or similar while you click through the real app.
+      </p>
+      <ol>
+        <li>Open Chrome with address bar visible → go to <code>https://legenda89.github.io/ClipMaker/</code> (full URL must be readable).</li>
+        <li>Show the hero: brand <strong>Clipmaker</strong>, Privacy Policy, Terms of Service.</li>
+        <li>Open the Clipmaker Windows desktop app (window title / UI shows Clipmaker).</li>
+        <li><strong>Login Kit</strong>: Connect TikTok → approve OAuth → return to app (<span class="scope">user.info.basic</span>).</li>
+        <li>Import audio + cover → create/render a short clip (show the real UI).</li>
+        <li><strong>video.upload</strong>: choose Inbox / draft mode → Publish → success (or inbox confirmation).</li>
+        <li><strong>video.publish</strong>: choose Direct post → Publish → success (Sandbox may be private / SELF_ONLY).</li>
+        <li>Keep the recording under ~50&nbsp;MB (mp4/mov). Do not show code or slide decks.</li>
+      </ol>
+      <p style="margin-bottom:0">Upload that MP4 in App review. Do not upload the old simulated demo.</p>
+    </div>
+
+    <div class="row">
+      <label>App name (portal)</label>
+      <input id="appname" readonly value="Clipmaker" />
+      <button class="btn btn-primary copy" data-target="appname">Copy</button>
+      <div class="ok" id="ok-appname"></div>
+    </div>
     <div class="row">
       <label>Website URL (Web / Desktop URL)</label>
       <input id="web" readonly value="https://legenda89.github.io/ClipMaker/" />
@@ -76,32 +110,18 @@
       <a class="btn btn-ghost" href="app-icon-1024.png" download>Download PNG</a>
       <div class="ok" id="ok-icon"></div>
     </div>
-    <div class="row">
-      <label>Demo video (upload this MP4 in App review)</label>
-      <input id="video" readonly value="https://legenda89.github.io/ClipMaker/clipmaker-tiktok-demo.mp4" />
-      <button class="btn btn-primary copy" data-target="video">Copy URL</button>
-      <a class="btn btn-ghost" href="clipmaker-tiktok-demo.mp4" download>Download MP4</a>
-      <div class="ok" id="ok-video"></div>
-    </div>
 
     <div class="row">
-      <label>App review — detailed explanation (Apply Reason / how each product &amp; scope works)</label>
-      <textarea id="reason" readonly>ClipMaker is a Windows desktop application for musicians and creators (product website: https://legenda89.github.io/ClipMaker/). It finds the best 20–60 second moment in a song, renders a vertical MP4 with cover art, and lets the signed-in creator publish that clip to their own TikTok account.
+      <label>App review — detailed explanation (how each product &amp; scope works)</label>
+      <textarea id="reason" readonly>Clipmaker is a Windows desktop app (website: https://legenda89.github.io/ClipMaker/). App name Clipmaker matches the website title, brand, and URL path. It finds the best 20-60s moment in a song, renders a 9:16 MP4 with cover art, and lets the creator publish to their own TikTok account.
 
-Products and scopes:
+1) Login Kit (Desktop) — user.info.basic: Connect TikTok opens OAuth (PKCE); callback http://127.0.0.1:8765/callback/; tokens stored only in local AppData to identify the authorized creator before posting.
 
-1) Login Kit (Desktop) — scope user.info.basic
-   The user clicks “Connect TikTok” in ClipMaker. The app opens TikTok’s OAuth authorization page (PKCE). After approval, TikTok redirects to http://127.0.0.1:8765/callback/ on the user’s machine. ClipMaker exchanges the code for tokens and stores them only in the user’s local AppData folder. user.info.basic is used to identify the authorized creator session required before Content Posting.
+2) Content Posting — video.upload: Inbox mode uploads the local MP4 to the creator TikTok inbox as a draft.
 
-2) Content Posting API — scope video.upload
-   After the user renders a clip, they can choose Inbox mode. ClipMaker calls the Content Posting inbox upload flow to send the local MP4 to the creator’s TikTok inbox as a draft. The creator finishes publishing in the TikTok app. This demonstrates video.upload end-to-end.
+3) Content Posting — video.publish: Direct Post enabled; Direct mode posts with caption via FILE_UPLOAD (Sandbox may be SELF_ONLY).
 
-3) Content Posting API — scope video.publish
-   The user can choose Direct post mode. ClipMaker calls creator_info/query, then post/publish/video/init with FILE_UPLOAD, uploads chunks, and polls status until complete. Caption and AI label (is_aigc) are included. In Sandbox / unaudited clients, posts use SELF_ONLY (private account). This demonstrates video.publish end-to-end.
-
-We do not request any other scopes. The demo video shows: (a) the ClipMaker website with Privacy Policy and Terms of Service, (b) opening the Windows app, (c) Login Kit authorization for user.info.basic, (d) creating a clip locally, (e) Content Posting with video.upload and video.publish labeled, (f) the user clicking Publish and a success state.
-
-Sandbox target user is used for the live integration demo when the app is not yet in production.</textarea>
+No other scopes. Resubmit changes: App name Clipmaker aligned with website; Direct Post + video.publish; new manually recorded E2E demo showing the full Website URL and real UI interactions (not AI/simulated).</textarea>
       <button class="btn btn-primary copy" data-target="reason">Copy explanation</button>
       <div class="ok" id="ok-reason"></div>
     </div>
@@ -109,14 +129,14 @@ Sandbox target user is used for the live integration demo when the app is not ye
     <div class="panel">
       <h2>Resubmit checklist</h2>
       <ul>
-        <li>Website URL = <code>https://legenda89.github.io/ClipMaker/</code> (product site, not a login page)</li>
-        <li>Privacy Policy + Terms of Service visible in the top navigation (no menu required)</li>
+        <li>App name = <code>Clipmaker</code> (same as website title / brand)</li>
+        <li>Website URL = <code>https://legenda89.github.io/ClipMaker/</code></li>
+        <li>Privacy Policy + Terms of Service in the top navigation</li>
         <li>Products: Login Kit (Desktop) + Content Posting API only</li>
-        <li>Scopes exactly: <code>user.info.basic</code>, <code>video.upload</code>, <code>video.publish</code> — remove any unused scopes</li>
-        <li>Redirect URI exactly: <code>http://127.0.0.1:8765/callback/</code> (trailing slash)</li>
-        <li>Upload the new demo MP4 in App review (shows full E2E + each scope)</li>
-        <li>Paste the explanation above into the App review text field</li>
-        <li>Verify URL properties for Website / Privacy / Terms in Production</li>
+        <li>Scopes exactly: <code>user.info.basic</code>, <code>video.upload</code>, <code>video.publish</code></li>
+        <li>Redirect URI: <code>http://127.0.0.1:8765/callback/</code> (trailing slash)</li>
+        <li>Upload a <strong>manually recorded</strong> demo MP4 (not the old simulated video)</li>
+        <li>Paste the explanation above into App review</li>
       </ul>
     </div>
   </div>

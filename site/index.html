@@ -3,8 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ClipMaker — music clips for YouTube Shorts &amp; TikTok</title>
-  <meta name="description" content="ClipMaker is a Windows desktop app that finds the best 20–60 second moment in a song, builds a vertical video with your cover art, and publishes to YouTube Shorts or TikTok with the user’s own account." />
+  <title>Clipmaker</title>
+  <meta name="application-name" content="Clipmaker" />
+  <meta property="og:site_name" content="Clipmaker" />
+  <meta property="og:title" content="Clipmaker" />
+  <meta name="description" content="Clipmaker is a Windows desktop app that finds the best 20–60 second moment in a song, builds a vertical video with your cover art, and publishes to YouTube Shorts or TikTok with the user’s own account." />
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32" />
   <link rel="icon" type="image/png" href="favicon-16.png" sizes="16x16" />
@@ -17,7 +20,7 @@
 <body>
   <div class="wrap">
     <nav class="nav">
-      <a class="brand" href="index.html">ClipMaker</a>
+      <a class="brand" href="index.html">Clipmaker</a>
       <div class="nav-links">
         <a href="#how">How it works</a>
         <a href="#tiktok">TikTok</a>
@@ -28,29 +31,33 @@
     </nav>
 
     <header class="hero">
-      <img class="app-icon" src="app-icon-1024.png" width="160" height="160" alt="ClipMaker app icon" />
-      <h1>ClipMaker</h1>
+      <img class="app-icon" src="app-icon-1024.png" width="160" height="160" alt="Clipmaker app icon" />
+      <h1>Clipmaker</h1>
+      <p class="product-url">
+        Official product website:
+        <a href="https://legenda89.github.io/ClipMaker/">https://legenda89.github.io/ClipMaker/</a>
+      </p>
       <p>
-        A Windows desktop product for musicians and creators. ClipMaker finds the strongest
+        A Windows desktop product for musicians and creators. Clipmaker finds the strongest
         20–60 second section of a track, combines it with cover art or video, and prepares a
         vertical clip for YouTube Shorts and TikTok. Publishing uses the creator’s own
-        Google/YouTube or TikTok account — ClipMaker never posts without an explicit click.
+        Google/YouTube or TikTok account — Clipmaker never posts without an explicit click.
       </p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="clipmaker-tiktok-demo.mp4">Watch product demo</a>
-        <a class="btn btn-ghost" href="#how">How it works</a>
+        <a class="btn btn-primary" href="#how">How it works</a>
+        <a class="btn btn-ghost" href="#tiktok">TikTok integration</a>
         <a class="btn btn-ghost" href="privacy.html">Privacy Policy</a>
         <a class="btn btn-ghost" href="terms.html">Terms of Service</a>
       </div>
       <div class="legal-bar">
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms of Service</a>
-        <a href="clipmaker-tiktok-demo.mp4">Demo video (MP4)</a>
+        <a href="https://legenda89.github.io/ClipMaker/">https://legenda89.github.io/ClipMaker/</a>
       </div>
     </header>
 
     <section class="section" id="how">
-      <h2>How ClipMaker works</h2>
+      <h2>How Clipmaker works</h2>
       <p class="lead">End-to-end flow on the user’s Windows PC. Media stays local until the user chooses to publish.</p>
       <ol class="steps">
         <li>
@@ -59,7 +66,7 @@
         </li>
         <li>
           <strong>Find the best moment</strong>
-          ClipMaker analyzes loudness/energy and suggests a 20–60 second start point. The user can preview and adjust.
+          Clipmaker analyzes loudness/energy and suggests a 20–60 second start point. The user can preview and adjust.
         </li>
         <li>
           <strong>Render a vertical clip</strong>
@@ -82,7 +89,7 @@
         <div class="panel">
           <h3>Local-first desktop app</h3>
           <ul>
-            <li>Runs on Windows; no ClipMaker cloud account required</li>
+            <li>Runs on Windows; no Clipmaker cloud account required</li>
             <li>Drag-and-drop audio and cover art</li>
             <li>Auto best-moment detection + manual start time</li>
             <li>Presets for TikTok / YouTube / square</li>
@@ -103,8 +110,8 @@
     <section class="section" id="tiktok">
       <h2>TikTok integration</h2>
       <p class="lead">
-        ClipMaker uses TikTok for Developers products to let the signed-in creator authorize
-        ClipMaker and upload a short video they just rendered. Products and scopes used:
+        Clipmaker uses TikTok for Developers products to let the signed-in creator authorize
+        Clipmaker and upload a short video they just rendered. Products and scopes used:
       </p>
       <div class="grid-2">
         <div class="panel">
@@ -112,7 +119,7 @@
           <p><span class="scope">user.info.basic</span></p>
           <p>
             Opens the TikTok authorization page in the browser. After the user approves,
-            ClipMaker receives an OAuth code on <code>http://127.0.0.1:8765/callback/</code>
+            Clipmaker receives an OAuth code on <code>http://127.0.0.1:8765/callback/</code>
             and stores tokens locally so the same creator can publish later without logging in every time.
           </p>
         </div>
@@ -122,33 +129,38 @@
           <p>
             <strong>video.upload</strong> sends the rendered MP4 to the creator’s TikTok inbox as a draft.
             <strong>video.publish</strong> posts directly with caption (Sandbox: private / SELF_ONLY until the app is approved).
-            The user chooses the mode in the ClipMaker UI and must click Publish.
+            The user chooses the mode in the Clipmaker UI and must click Publish.
           </p>
         </div>
       </div>
       <div class="panel">
-        <h3>What the demo video shows</h3>
+        <h3>TikTok review demo (manual screen recording)</h3>
+        <p>
+          Review demos must be recorded by a person navigating the real Clipmaker UI
+          (not AI agents or simulated slides). Show the full website URL
+          <code>https://legenda89.github.io/ClipMaker/</code>, then:
+        </p>
         <ul>
-          <li>ClipMaker website (this page) and the Windows app UI</li>
-          <li>Connect TikTok → Login Kit consent (scope <span class="scope">user.info.basic</span>)</li>
-          <li>Create a 30s clip from audio + cover</li>
-          <li>Publish to TikTok via Content Posting (<span class="scope">video.upload</span> / <span class="scope">video.publish</span>)</li>
-          <li>Success state in the app</li>
+          <li>Open the Clipmaker Windows app</li>
+          <li>Connect TikTok → Login Kit consent (<span class="scope">user.info.basic</span>)</li>
+          <li>Create a short clip from audio + cover</li>
+          <li>Publish via Content Posting: Inbox (<span class="scope">video.upload</span>) and/or Direct (<span class="scope">video.publish</span>)</li>
+          <li>Show the success state in the app</li>
         </ul>
-        <p style="margin-top:0.9rem"><a href="clipmaker-tiktok-demo.mp4">Open demo video →</a></p>
+        <p style="margin-top:0.9rem"><a href="tiktok-fill.html">Recording checklist →</a></p>
       </div>
     </section>
 
     <section class="section" id="download">
-      <h2>Get ClipMaker</h2>
+      <h2>Get Clipmaker</h2>
       <div class="panel">
         <p>
-          ClipMaker is distributed as a Windows desktop application for creators who already
+          Clipmaker is distributed as a Windows desktop application for creators who already
           produce music locally. Source and releases are maintained on GitHub.
         </p>
         <div class="cta-row" style="margin-top:1rem">
           <a class="btn btn-primary" href="https://github.com/Legenda89/ClipMaker" target="_blank" rel="noopener">GitHub repository</a>
-          <a class="btn btn-ghost" href="clipmaker-tiktok-demo.mp4">Product demo</a>
+          <a class="btn btn-ghost" href="tiktok-fill.html">TikTok review helper</a>
         </div>
       </div>
     </section>
@@ -156,17 +168,17 @@
     <section class="section">
       <h2>FAQ</h2>
       <div class="panel">
-        <h3>Does ClipMaker post without permission?</h3>
+        <h3>Does Clipmaker post without permission?</h3>
         <p>No. Connecting TikTok/YouTube only stores OAuth tokens. Uploads happen only when the user presses Publish.</p>
         <h3>Where is data stored?</h3>
         <p>Media files stay on the user’s PC. OAuth tokens live under the user’s local AppData\ClipMaker folder. See the Privacy Policy.</p>
         <h3>Is this a mobile app?</h3>
-        <p>No. ClipMaker is a Windows desktop app using TikTok Login Kit for Desktop and the Content Posting API.</p>
+        <p>No. Clipmaker is a Windows desktop app using TikTok Login Kit for Desktop and the Content Posting API.</p>
       </div>
     </section>
 
     <footer class="footer">
-      © <span id="y"></span> ClipMaker ·
+      © <span id="y"></span> Clipmaker ·
       <a href="terms.html">Terms of Service</a> ·
       <a href="privacy.html">Privacy Policy</a> ·
       <a href="tiktok-fill.html">Developer form helper</a>
